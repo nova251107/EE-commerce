@@ -1,0 +1,25 @@
+# APEX Dynamic Pricing Engine — Dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Core API ──────────────────────────────────────────────
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# ── Data ──────────────────────────────────────────────────
+pandas>=2.0.0
+numpy>=1.24.0
+pyarrow>=14.0.0          # Parquet read/write
+
+# ── ML ────────────────────────────────────────────────────
+scikit-learn>=1.3.0
+joblib>=1.3.0
+
+# ── Optional heavy ML (graceful fallback to sklearn if absent) ──
+xgboost>=2.0.0
+lightgbm>=4.0.0
+
+# ── Streaming / Cache ──────────────────────────────────────
+redis>=5.0.0              # Redis Streams consumer (redis_worker.py)
+
+# ── Utilities ─────────────────────────────────────────────
+python-multipart>=0.0.6  # Required for FastAPI form/file uploads
