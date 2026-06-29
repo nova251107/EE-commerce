@@ -68,7 +68,7 @@ if sys.platform == "win32":
 # ─────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PARQUET_DIR = os.path.join(BASE_DIR, "Problem Statement 3 Sample Data")
-MAX_PRICE_INCREASE = 0.15   # 15% hard ceiling (fairness)
+MAX_PRICE_INCREASE = 0.20   # 20% hard ceiling (fairness + inventory buffer)
 MAX_PRICE_DECREASE = 0.10   # 10% max discount
 DEMAND_THRESHOLD = 50       # ML rule: demand > 50 → +5%
 LOW_STOCK_THRESHOLD = 20    # ML rule: stock < 20 → +3%

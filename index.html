@@ -27,8 +27,9 @@
             mono: ["DM Mono", "monospace"],
           },
           colors: {
-            gold: { DEFAULT: "#e2b96f", dark: "#c8973e", light: "#f0d49a" },
-            surface: { DEFAULT: "#080810", card: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.07)" },
+            neon: { DEFAULT: "#a78bfa", dark: "#7c3aed", light: "#d8b4fe" },
+            cyan: { DEFAULT: "#22d3ee" },
+            surface: { DEFAULT: "#030014", card: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.07)" },
           },
           animation: {
             'float': 'float 6s ease-in-out infinite',
@@ -47,6 +48,18 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    window.initializeApp = initializeApp;
+    window.getAuth = getAuth;
+    window.signInWithPopup = signInWithPopup;
+    window.GoogleAuthProvider = GoogleAuthProvider;
+    window.onAuthStateChanged = onAuthStateChanged;
+    window.signOut = signOut;
+  </script>
+
   <!-- GSAP for advanced animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -58,12 +71,15 @@
 
   <style>
     :root {
-      --gold: #e2b96f;
-      --gold-dark: #c8973e;
-      --gold-light: #f0d49a;
-      --bg: #080810;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --border: rgba(255, 255, 255, 0.07);
+      --neon: #a78bfa;
+      --neon-dark: #7c3aed;
+      --neon-light: #d8b4fe;
+      --cyan: #22d3ee;
+      --bg: #030014;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(10, 10, 25, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.15);
     }
 
     * {
@@ -127,7 +143,7 @@
       border-radius: 99px;
       padding: 6px 16px;
       font-size: 12px;
-      color: var(--gold-light);
+      color: var(--neon-light);
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 500;
@@ -163,7 +179,7 @@
       font-weight: 900;
       line-height: 1.0;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 30%, var(--gold) 70%, var(--gold-dark) 100%);
+      background: linear-gradient(135deg, #fff 30%, var(--neon) 70%, var(--neon-dark) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -186,7 +202,7 @@
     }
 
     .hero-cta-primary {
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      background: linear-gradient(135deg, var(--neon) 0%, var(--neon-dark) 100%);
       color: #080810;
       box-shadow: 0 8px 32px rgba(226, 185, 111, 0.35);
     }
@@ -269,7 +285,7 @@
     }
 
     .marquee-item span {
-      color: var(--gold);
+      color: var(--neon);
       font-size: 16px;
     }
 
@@ -280,7 +296,7 @@
       font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--neon);
       margin-bottom: 10px;
     }
 
@@ -406,7 +422,7 @@
       gap: 6px;
       width: 100%;
       padding: 10px;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      background: linear-gradient(135deg, var(--neon) 0%, var(--neon-dark) 100%);
       color: #080810;
       font-size: 12px;
       font-weight: 700;
@@ -491,7 +507,7 @@
       width: 14px;
       height: 14px;
       border: 2px solid rgba(226, 185, 111, 0.2);
-      border-top-color: var(--gold);
+      border-top-color: var(--neon);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       flex-shrink: 0;
@@ -580,7 +596,7 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: var(--gold);
+      background: var(--neon);
       transform: scaleX(0);
       transition: transform 0.25s ease;
     }
@@ -614,7 +630,7 @@
     .category-pill.active {
       background: rgba(226, 185, 111, 0.1);
       border-color: rgba(226, 185, 111, 0.35);
-      color: var(--gold);
+      color: var(--neon);
     }
 
     /* ── Features Section ── */
@@ -683,7 +699,7 @@
     }
 
     .footer-link:hover {
-      color: var(--gold);
+      color: var(--neon);
     }
 
     /* ── Glassmorphism panel ── */
@@ -714,7 +730,7 @@
       right: -6px;
       width: 18px;
       height: 18px;
-      background: var(--gold);
+      background: var(--neon);
       color: #080810;
       border-radius: 50%;
       font-size: 9px;
@@ -778,7 +794,7 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, #7c3aed, #e2b96f, #10b981);
+      background: linear-gradient(90deg, #7c3aed, #a78bfa, #10b981);
     }
 
     .fe-metric {
@@ -803,7 +819,7 @@
       font-size: 22px;
       font-weight: 800;
       font-family: 'DM Mono', monospace;
-      color: #e2b96f;
+      color: #a78bfa;
       line-height: 1;
     }
 
@@ -1033,7 +1049,7 @@
     }
 
     const FEATURES = [
-      { icon: "⚡", title: "Real-Time Pricing", desc: "Prices update dynamically based on demand, inventory, and market signals — all in milliseconds.", gradient: "linear-gradient(135deg,#e2b96f22,#c8973e11)" },
+      { icon: "⚡", title: "Real-Time Pricing", desc: "Prices update dynamically based on demand, inventory, and market signals — all in milliseconds.", gradient: "linear-gradient(135deg,#a78bfa22,#7c3aed11)" },
       { icon: "🤖", title: "AI Recommendations", desc: "Our recommendation engine learns from your browsing patterns to surface the most relevant products.", gradient: "linear-gradient(135deg,#7c3aed22,#5b21b611)" },
       { icon: "🔒", title: "Secure Checkout", desc: "256-bit SSL encryption on every transaction. Your payment data never touches our servers.", gradient: "linear-gradient(135deg,#10b98122,#06966811)" },
       { icon: "🚀", title: "Same-Day Delivery", desc: "Order before 2 PM and receive your package the same day across 120+ cities.", gradient: "linear-gradient(135deg,#3b82f622,#1d4ed811)" },
@@ -1158,7 +1174,7 @@
             </div>
             <button onClick={runMatrix} disabled={loading}
               className="px-5 py-2.5 rounded-xl font-semibold text-[13px] border-none cursor-pointer transition-all"
-              style={{ background: "linear-gradient(135deg,#e2b96f,#c8973e)", color: "#080810", opacity: loading ? 0.6 : 1 }}>
+              style={{ background: "linear-gradient(135deg,#a78bfa,#7c3aed)", color: "#080810", opacity: loading ? 0.6 : 1 }}>
               {loading ? "Running…" : "⚡ Run Simulation"}
             </button>
           </div>
@@ -1500,7 +1516,7 @@
     /* ─────────────── COMPONENTS ─────────────── */
 
     function PriceTag({ price, originalPrice, flash, trending }) {
-      const color = flash === "up" ? "#4ade80" : flash === "down" ? "#f87171" : "#e2b96f";
+      const color = flash === "up" ? "#4ade80" : flash === "down" ? "#f87171" : "#a78bfa";
       const cls = flash === "up" ? "price-flash-up" : flash === "down" ? "price-flash-down" : "";
       const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
@@ -1609,7 +1625,7 @@
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[12px] font-medium text-white/85 truncate m-0">{product.name}</p>
-            <p className="text-[11px] font-mono m-0 mt-0.5" style={{ color: "#e2b96f" }}>
+            <p className="text-[11px] font-mono m-0 mt-0.5" style={{ color: "#a78bfa" }}>
               {formatPrice(product.price)}
             </p>
             {isNew && <p className="text-[9px] text-green-400 m-0">Just recommended</p>}
@@ -1624,7 +1640,7 @@
         <div className="rounded-xl px-3 py-2.5 flex flex-col gap-0.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
           {icon && <span className="text-base mb-0.5">{icon}</span>}
           <p className="text-[9px] tracking-[0.1em] font-semibold m-0" style={{ color: "rgba(255,255,255,0.3)" }}>{label}</p>
-          <p className="text-base font-bold font-mono m-0" style={{ color: "#e2b96f" }}>{value}</p>
+          <p className="text-base font-bold font-mono m-0" style={{ color: "#a78bfa" }}>{value}</p>
         </div>
       );
     }
@@ -1669,7 +1685,7 @@
 
                 <h1 className="hero-title mb-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
                   Shop<br />Smarter.<br />
-                  <span style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg, #e2b96f, #f0d49a)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>
+                  <span style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg, #a78bfa, #d8b4fe)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>
                     Save More.
                   </span>
                 </h1>
@@ -1693,7 +1709,7 @@
                 <div className="flex flex-wrap gap-6 mt-10" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
                   {[["50K+", "Happy Customers"], ["₹2Cr+", "Savings This Month"], ["8 Mins", "Avg Delivery ETA"]].map(([v, l]) => (
                     <div key={l}>
-                      <p className="text-xl font-bold font-mono m-0" style={{ color: "#e2b96f" }}>{v}</p>
+                      <p className="text-xl font-bold font-mono m-0" style={{ color: "#a78bfa" }}>{v}</p>
                       <p className="text-[11px] m-0 mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>{l}</p>
                     </div>
                   ))}
@@ -1711,7 +1727,7 @@
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold font-mono" style={{ color: "#e2b96f" }}>{formatPrice(PRODUCTS[0].price)}</span>
+                    <span className="text-xl font-bold font-mono" style={{ color: "#a78bfa" }}>{formatPrice(PRODUCTS[0].price)}</span>
                     <span className="text-[11px] line-through" style={{ color: "rgba(255,255,255,0.25)" }}>{formatPrice(PRODUCTS[0].originalPrice)}</span>
                   </div>
                 </div>
@@ -1725,7 +1741,7 @@
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold font-mono" style={{ color: "#e2b96f" }}>{formatPrice(PRODUCTS[2].price)}</span>
+                    <span className="text-xl font-bold font-mono" style={{ color: "#a78bfa" }}>{formatPrice(PRODUCTS[2].price)}</span>
                     <button className="add-to-cart-btn" style={{ width: "auto", padding: "6px 14px", borderRadius: 8, fontSize: 11 }}>Add →</button>
                   </div>
                 </div>
@@ -1766,6 +1782,38 @@
       const [showLogin, setShowLogin] = useState(false);
       const [activeCategory, setActiveCategory] = useState("All");
       const [cartCount, setCartCount] = useState(0);
+
+      const [user, setUser] = useState(null);
+      const [cartItems, setCartItems] = useState([]);
+      const [showCart, setShowCart] = useState(false);
+      const [showCheckout, setShowCheckout] = useState(false);
+      
+      useEffect(() => {
+        if (window.onAuthStateChanged && window.getAuth) {
+            window.onAuthStateChanged(window.getAuth(), (u) => setUser(u));
+        }
+      }, []);
+
+      const handleLogin = async () => {
+          if (!window.getAuth || !window.GoogleAuthProvider) return;
+          const auth = window.getAuth();
+          const provider = new window.GoogleAuthProvider();
+          try {
+              await window.signInWithPopup(auth, provider);
+              setToast("Logged in successfully! 🎉");
+              setShowLogin(false);
+          } catch (e) {
+              console.error(e);
+              setToast("Login failed: " + e.message);
+          }
+      };
+      
+      const handleLogout = async () => {
+          if (!window.getAuth) return;
+          await window.signOut(window.getAuth());
+          setToast("Logged out successfully");
+      };
+
       const [toast, setToast] = useState(null);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
       // ML Engine state
@@ -1884,10 +1932,19 @@
         }
       }, [products, recommendations, loading, simCount]);
 
+      
       const handleCart = (product) => {
         setCartCount((c) => c + 1);
+        setCartItems(prev => {
+            const existing = prev.find(item => item.id === product.id);
+            if (existing) {
+                return prev.map(item => item.id === product.id ? {...item, qty: item.qty + 1} : item);
+            }
+            return [...prev, {...product, qty: 1}];
+        });
         setToast(`${product.name} added to cart!`);
       };
+
 
       const filteredProducts = activeCategory === "All"
         ? products
@@ -1905,7 +1962,7 @@
             {/* Logo */}
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold"
-                style={{ background: "linear-gradient(135deg, #e2b96f, #c8973e)", color: "#080810" }}>◈</div>
+                style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#080810" }}>◈</div>
               <span className="font-playfair text-lg" style={{ color: "#f8e2a4" }}>Smart Shop</span>
             </div>
 
@@ -1927,24 +1984,33 @@
               {/* Sim counter */}
               <div className="text-right hidden sm:block">
                 <p className="text-[9px] tracking-[0.1em] m-0 leading-none" style={{ color: "rgba(255,255,255,0.25)" }}>RUNS</p>
-                <p className="text-base font-mono font-bold m-0 leading-tight" style={{ color: "#e2b96f" }}>{String(simCount).padStart(3, "0")}</p>
+                <p className="text-base font-mono font-bold m-0 leading-tight" style={{ color: "#a78bfa" }}>{String(simCount).padStart(3, "0")}</p>
               </div>
 
               {/* Cart */}
-              <div className="relative cursor-pointer" onClick={() => setToast("Cart feature coming soon!")}>
+              <div className="relative cursor-pointer" onClick={() => setShowCart(true)}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
                   style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>🛒</div>
                 {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
               </div>
 
               {/* Login */}
-              <button
-                className="sim-btn hidden sm:flex rounded-xl px-4 py-2 text-[12px] font-semibold items-center gap-1.5 border-none"
-                onClick={() => setShowLogin(true)}
-                style={{ background: "rgba(255,255,255,0.05)", color: "#e2b96f", border: "1px solid rgba(226,185,111,0.25)", fontFamily: "Outfit,sans-serif", cursor: "pointer" }}
-              >
-                🔐 Login
-              </button>
+
+              {user ? (
+                  <div className="flex items-center gap-3">
+                    <img src={user.photoURL} alt="User" className="w-8 h-8 rounded-full border border-neon" />
+                    <button onClick={handleLogout} className="text-[12px] text-gray-400 hover:text-white bg-transparent border-none cursor-pointer">Logout</button>
+                  </div>
+              ) : (
+                  <button
+                    className="sim-btn hidden sm:flex rounded-xl px-4 py-2 text-[12px] font-semibold items-center gap-1.5 border-none"
+                    onClick={() => setShowLogin(true)}
+                    style={{ background: "rgba(255,255,255,0.05)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.25)", fontFamily: "Outfit,sans-serif", cursor: "pointer" }}
+                  >
+                    🔐 Login
+                  </button>
+              )}
+
 
               {/* Simulate */}
               <button
@@ -1953,7 +2019,7 @@
                 onClick={simulateClick}
                 disabled={loading}
                 style={{
-                  background: loading ? "rgba(226,185,111,0.1)" : "linear-gradient(135deg, #e2b96f 0%, #c8973e 100%)",
+                  background: loading ? "rgba(226,185,111,0.1)" : "linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)",
                   color: loading ? "rgba(226,185,111,0.5)" : "#080810",
                   cursor: loading ? "not-allowed" : "pointer",
                   fontFamily: "Outfit, sans-serif",
@@ -2093,10 +2159,10 @@
                 <div className="mt-4 rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(226,185,111,0.2)" }}>
                   <img src={PRODUCTS[3].img} alt="Deal" className="w-full h-32 object-cover" />
                   <div className="p-4" style={{ background: "rgba(226,185,111,0.05)" }}>
-                    <p className="text-[10px] font-bold tracking-[0.15em] text-gold m-0 mb-1">⏱ DEAL OF THE DAY</p>
+                    <p className="text-[10px] font-bold tracking-[0.15em] text-neon m-0 mb-1">⏱ DEAL OF THE DAY</p>
                     <p className="text-[13px] font-semibold text-white/90 m-0">{PRODUCTS[3].name}</p>
                     <div className="flex items-center justify-between mt-2">
-                      <span className="text-base font-bold font-mono" style={{ color: "#e2b96f" }}>{formatPrice(PRODUCTS[3].price)}</span>
+                      <span className="text-base font-bold font-mono" style={{ color: "#a78bfa" }}>{formatPrice(PRODUCTS[3].price)}</span>
                       <span className="text-[10px] font-bold text-green-400 bg-green-400/10 px-2 py-0.5 rounded">
                         SAVE {Math.round(((PRODUCTS[3].originalPrice - PRODUCTS[3].price) / PRODUCTS[3].originalPrice) * 100)}%
                       </span>
@@ -2143,7 +2209,7 @@
                   </div>
                   <div className="fe-metric">
                     <span className="fe-metric-label">Price Sensitivity</span>
-                    <span className="fe-metric-value" style={{ color: featureVector && featureVector.price_sensitivity > 0.5 ? "#f87171" : "#e2b96f" }}>
+                    <span className="fe-metric-value" style={{ color: featureVector && featureVector.price_sensitivity > 0.5 ? "#f87171" : "#a78bfa" }}>
                       {featureVector ? (featureVector.price_sensitivity * 100).toFixed(0) + "%" : "—"}
                     </span>
                     <span className="fe-metric-sub">discount interaction ratio</span>
@@ -2188,7 +2254,7 @@
                 {featureVector?.active_category && (
                   <div className="flex items-center gap-2 mt-2">
                     <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.3)" }}>Most-browsed category:</span>
-                    <span className="text-[11px] font-semibold" style={{ color: "#e2b96f" }}>{featureVector.active_category}</span>
+                    <span className="text-[11px] font-semibold" style={{ color: "#a78bfa" }}>{featureVector.active_category}</span>
                   </div>
                 )}
               </div>
@@ -2250,7 +2316,7 @@
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-2 text-[10px]">
-                        <div style={{ color: "rgba(255,255,255,0.4)" }}>⚙ Heuristic: <span style={{ color: "#e2b96f" }}>{demandScore.heuristic_score?.toFixed(1)}</span></div>
+                        <div style={{ color: "rgba(255,255,255,0.4)" }}>⚙ Heuristic: <span style={{ color: "#a78bfa" }}>{demandScore.heuristic_score?.toFixed(1)}</span></div>
                         <div style={{ color: "rgba(255,255,255,0.4)" }}>🤖 ML: <span style={{ color: "#a78bfa" }}>{demandScore.ml_score?.toFixed(1)}</span></div>
                         <div style={{ color: "rgba(255,255,255,0.4)" }}>🖱 Clicks/60s: <span style={{ color: "#60a5fa" }}>{demandScore.click_velocity_60s?.toFixed(1)}</span></div>
                         <div style={{ color: "rgba(255,255,255,0.4)" }}>🛒 Carts/60s: <span style={{ color: "#facc15" }}>{demandScore.cart_velocity_60s?.toFixed(1)}</span></div>
@@ -2333,7 +2399,7 @@
             <SimulationPanel API_BASE={API_BASE} />
             <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-aos="fade-up">
               {[
-                { icon: "⚡", challenge: "C1: Data Delay", solution: "Real-time streaming features only — no historical lag", color: "#e2b96f" },
+                { icon: "⚡", challenge: "C1: Data Delay", solution: "Real-time streaming features only — no historical lag", color: "#a78bfa" },
                 { icon: "🎯", challenge: "C2: Overfitting", solution: "Simple linear models (logistic + scoring) — 3 features max", color: "#a78bfa" },
                 { icon: "🚀", challenge: "C3: Latency", solution: "Precomputed weights → inference in <1ms per request", color: "#34d399" },
                 { icon: "🌟", challenge: "C4: Cold Start", solution: "Trending + device + time-of-day signals for new users", color: "#60a5fa" },
@@ -2361,7 +2427,7 @@
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold"
-                  style={{ background: "linear-gradient(135deg, #e2b96f, #c8973e)", color: "#080810" }}>◈</div>
+                  style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#080810" }}>◈</div>
                 <span className="font-playfair text-lg" style={{ color: "#f8e2a4" }}>Smart Shop</span>
               </div>
 
@@ -2387,50 +2453,99 @@
                   className="absolute top-4 right-4"
                   style={{ color: "rgba(255,255,255,0.3)", background: "none", border: "none", cursor: "pointer", fontSize: 18 }}>✕</button>
 
+                
                 <div className="text-center mb-7">
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"
-                    style={{ background: "linear-gradient(135deg, #e2b96f, #c8973e)" }}>🔐</div>
-                  <h2 className="text-xl font-playfair m-0 mb-1" style={{ color: "#e2b96f" }}>Welcome Back</h2>
+                    style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)" }}>🔐</div>
+                  <h2 className="text-xl font-playfair m-0 mb-1" style={{ color: "#a78bfa" }}>Welcome Back</h2>
                   <p className="text-[13px] m-0" style={{ color: "rgba(255,255,255,0.4)" }}>Sign in to your Smart Shop account</p>
                 </div>
 
-                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setShowLogin(false); setToast("Logged in successfully! 🎉"); }}>
-                  {["Email or Mobile Number", "Password"].map((label, i) => (
-                    <div key={label}>
-                      <label className="block text-[12px] font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>{label}</label>
-                      <input
-                        type={i === 1 ? "password" : "text"}
-                        placeholder={i === 0 ? "you@example.com" : "••••••••"}
-                        className="w-full px-4 py-3 rounded-xl text-white text-[13px] outline-none transition-all"
-                        style={{
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          fontFamily: "Outfit, sans-serif",
-                        }}
-                        onFocus={(e) => e.target.style.borderColor = "rgba(226,185,111,0.4)"}
-                        onBlur={(e) => e.target.style.borderColor = "rgba(255,255,255,0.08)"}
-                      />
-                    </div>
-                  ))}
-
-                  <div className="flex items-center justify-between text-[12px]">
-                    <label className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.5)", cursor: "pointer" }}>
-                      <input type="checkbox" className="rounded" /> Remember me
-                    </label>
-                    <a href="#" style={{ color: "#e2b96f", textDecoration: "none" }}>Forgot password?</a>
-                  </div>
-
-                  <button type="submit" className="w-full py-3 rounded-xl font-semibold text-[13px] tracking-wide border-none cursor-pointer transition-all"
-                    style={{ background: "linear-gradient(135deg, #e2b96f 0%, #c8973e 100%)", color: "#080810", fontFamily: "Outfit, sans-serif" }}>
-                    Sign In
+                <div className="space-y-4">
+                  <button onClick={handleLogin} className="w-full py-3 rounded-xl font-semibold text-[13px] tracking-wide border-none cursor-pointer transition-all flex items-center justify-center gap-2"
+                    style={{ background: "linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)", color: "#030014", fontFamily: "Outfit, sans-serif" }}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.761H12.545z"/></svg>
+                    Sign in with Google
                   </button>
+                </div>
 
-                  <p className="text-center text-[12px] m-0" style={{ color: "rgba(255,255,255,0.4)" }}>
-                    No account? <a href="#" style={{ color: "#e2b96f", textDecoration: "none" }}>Sign up free →</a>
-                  </p>
-                </form>
               </div>
             </div>
+          )}
+
+          
+          {/* ── CART MODAL ── */}
+          {showCart && (
+              <div className="fixed inset-0 z-50 flex" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
+                <div className="ml-auto w-full max-w-md h-full flex flex-col" style={{ background: "#0a0a18", borderLeft: "1px solid rgba(255,255,255,0.1)", animation: "slideIn 0.3s ease-out" }}>
+                  <div className="flex items-center justify-between p-6 border-b border-white/10">
+                    <h2 className="text-xl font-bold text-neon m-0">Your Cart</h2>
+                    <button onClick={() => setShowCart(false)} className="text-gray-400 hover:text-white bg-transparent border-none text-xl cursor-pointer">✕</button>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                    {cartItems.length === 0 ? (
+                        <p className="text-gray-400 text-center mt-10">Your cart is empty.</p>
+                    ) : (
+                        cartItems.map(item => (
+                            <div key={item.id} className="flex gap-4 items-center bg-white/5 p-3 rounded-xl border border-white/10">
+                                <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
+                                <div className="flex-1">
+                                    <h4 className="text-sm font-semibold text-white m-0">{item.name}</h4>
+                                    <p className="text-neon text-sm m-0">${item.price}</p>
+                                </div>
+                                <div className="text-sm font-mono bg-black/30 px-3 py-1 rounded-md text-gray-300">x{item.qty}</div>
+                            </div>
+                        ))
+                    )}
+                  </div>
+                  <div className="p-6 border-t border-white/10 bg-black/20">
+                    <div className="flex justify-between text-lg font-bold text-white mb-4">
+                        <span>Total:</span>
+                        <span>${cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2)}</span>
+                    </div>
+                    <button 
+                        onClick={() => { setShowCart(false); setShowCheckout(true); }}
+                        disabled={cartItems.length === 0}
+                        className="w-full py-3 rounded-xl font-semibold text-black cursor-pointer disabled:opacity-50 border-none"
+                        style={{ background: "linear-gradient(135deg, #a78bfa, #22d3ee)" }}>
+                        Proceed to Checkout
+                    </button>
+                  </div>
+                </div>
+              </div>
+          )}
+
+          {/* ── STRIPE MOCK MODAL ── */}
+          {showCheckout && (
+             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(8,8,16,0.85)", backdropFilter: "blur(12px)" }}>
+                <div className="rounded-2xl p-8 max-w-md w-full mx-4 relative bg-white text-black shadow-2xl">
+                    <button onClick={() => setShowCheckout(false)} className="absolute top-4 right-4 text-gray-500 bg-transparent border-none text-xl cursor-pointer">✕</button>
+                    <div className="text-center mb-6">
+                        <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">S</div>
+                        <h2 className="text-2xl font-bold m-0">Stripe Mock</h2>
+                        <p className="text-gray-500 text-sm m-0">Test mode payment</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                        <p className="text-gray-600 text-sm mb-1 m-0">Amount due</p>
+                        <p className="text-3xl font-bold text-black m-0">${cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2)}</p>
+                    </div>
+                    <div className="space-y-4">
+                        <input type="text" placeholder="Card Number" defaultValue="4242 4242 4242 4242" className="w-full px-4 py-3 rounded-lg border border-gray-300 font-mono text-gray-700 outline-none focus:border-indigo-500" />
+                        <div className="flex gap-4">
+                            <input type="text" placeholder="MM / YY" defaultValue="12 / 28" className="w-1/2 px-4 py-3 rounded-lg border border-gray-300 font-mono text-gray-700 outline-none focus:border-indigo-500" />
+                            <input type="text" placeholder="CVC" defaultValue="123" className="w-1/2 px-4 py-3 rounded-lg border border-gray-300 font-mono text-gray-700 outline-none focus:border-indigo-500" />
+                        </div>
+                        <button onClick={() => {
+                            setToast("Payment successful! 🎉");
+                            setCartItems([]);
+                            setCartCount(0);
+                            setShowCheckout(false);
+                        }} className="w-full py-4 bg-indigo-600 text-white rounded-lg font-bold text-lg border-none cursor-pointer hover:bg-indigo-700 transition-colors">
+                            Pay Now
+                        </button>
+                    </div>
+                </div>
+             </div>
           )}
 
           {/* ── TOAST ── */}

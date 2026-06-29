@@ -145,7 +145,7 @@ class DynamicAdjustmentCalculator:
     ]
 
     # Hard limits (never exceed regardless of signals)
-    CEILING_PCT = 0.15
+    CEILING_PCT = 0.20
     FLOOR_PCT   = -0.30
 
     def calculate(
@@ -213,21 +213,21 @@ class DynamicAdjustmentCalculator:
         inv_status = "normal"
 
         if inventory < 10:
-            inv_adj    = 0.05    # +5% critical scarcity
+            inv_adj    = 0.10    # +10% critical scarcity
             inv_status = "scarce"
-            reasons.append(f"🚨 Critical stock ({inventory} left): +5% urgency")
+            reasons.append(f"🚨 Critical stock ({inventory} left): +10% urgency")
         elif inventory < 20:
-            inv_adj    = 0.03    # +3% scarcity boost
+            inv_adj    = 0.05    # +5% scarcity boost
             inv_status = "scarce"
-            reasons.append(f"🔥 Low stock ({inventory} left): +3% urgency")
+            reasons.append(f"🔥 Low stock ({inventory} left): +5% urgency")
         elif inventory > 500:
-            inv_adj    = -0.05   # −5% clearance
+            inv_adj    = -0.20   # −20% clearance
             inv_status = "surplus"
-            reasons.append(f"📦 Surplus stock ({inventory} units): −5% to clear")
+            reasons.append(f"📦 Massive Surplus ({inventory} units): −20% to clear")
         elif inventory > 200:
-            inv_adj    = -0.02   # −2% mild surplus
+            inv_adj    = -0.10   # −10% surplus
             inv_status = "surplus"
-            reasons.append(f"📦 High stock ({inventory} units): −2%")
+            reasons.append(f"📦 High stock ({inventory} units): −10% markdown")
 
         # ── User-intent micro-boost (β coefficient) ──────────────
         intent_adj = 0.0
