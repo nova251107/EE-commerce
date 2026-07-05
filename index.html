@@ -52,7 +52,20 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    window.initializeApp = initializeApp;
+    
+    // Initialize Firebase with a dummy config so the app doesn't crash.
+    // The user MUST replace this with their actual Firebase config.
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    
     window.getAuth = getAuth;
     window.signInWithPopup = signInWithPopup;
     window.GoogleAuthProvider = GoogleAuthProvider;
@@ -1789,8 +1802,12 @@
       const [showCheckout, setShowCheckout] = useState(false);
       
       useEffect(() => {
-        if (window.onAuthStateChanged && window.getAuth) {
-            window.onAuthStateChanged(window.getAuth(), (u) => setUser(u));
+        try {
+            if (window.onAuthStateChanged && window.getAuth) {
+                window.onAuthStateChanged(window.getAuth(), (u) => setUser(u));
+            }
+        } catch (e) {
+            console.error("Firebase Auth not initialized correctly", e);
         }
       }, []);
 
